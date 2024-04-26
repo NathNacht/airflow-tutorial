@@ -48,13 +48,13 @@ echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
 3. Running airflow-init
 
 ```	bash
-docker-compose up airflow-init
+docker compose up airflow-init
 ```
 
 4. Starting the remaining services
 
 ```	bash
-docker-compose up
+docker compose up
 ``` 
 
 Airflow GUI is now available at: http://localhost:8080/
