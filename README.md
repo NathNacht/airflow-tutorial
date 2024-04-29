@@ -12,11 +12,7 @@ Starting from https://www.youtube.com/watch?v=Sva8rDtlWi4 to have a working Airf
 
 ## Steps followed
 
-0. Install airflow
-
-```	bash
-pip install apache-airflow
-```
+Airflow should NOT be installed locally!! This is done through the docker-compose file
 
 1. From https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html fetched the docker-compose.yaml file
 
@@ -67,6 +63,8 @@ docker compose down --volumes --remove-orphans
 # or
 docker compose down --volumes --rmi all
 ```
+
+6. Troubleshooting
 
 
 
