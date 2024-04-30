@@ -66,5 +66,17 @@ docker compose down --volumes --rmi all
 
 6. Troubleshooting
 
+Logging in into a running container:
+
+```	bash
+docker compose exec airflow-worker /bin/bash
+```
+
+Connecting to the postgres database:
+
+```	bash
+docker compose exec postgres psql -U airflow -d airflow
+```
+
 
 
