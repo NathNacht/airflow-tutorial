@@ -1,6 +1,16 @@
 import pandas as pd
 import os
 
+AIRFLOW_HOME = os.getenv('AIRFLOW_HOME', '/home/miubuntu/home/BECODE_GUIDE/Airflow_tutorial/airflow-tutorial')
+plugins_directory = os.path.join(AIRFLOW_HOME, 'plugins')
+
+# Define the file paths using os.path.join to ensure compatibility
+raw_huis_te_koop_path = os.path.join(plugins_directory, "data", "raw", "raw_huis_te_koop.csv")
+raw_apartement_te_koop_path = os.path.join(plugins_directory, "data", "raw", "raw_apartement_te_koop.csv")
+zipcodes_alpha_nl_new = os.path.join(plugins_directory, "data", "raw", "zipcodes_alpha_nl_new.csv")
+georef_belgium_postal_codes = os.path.join(plugins_directory, "data", "raw", "georef-belgium-postal-codes.csv")
+
+
 def strip_all_columns(df):
     cl = []
     for columns in df:
@@ -160,17 +170,11 @@ def get_province(df):
     return merged_df
 
 
-# Define the file paths using os.path.join to ensure compatibility
-raw_huis_te_koop_path = os.path.join(".", "plugins", "data", "raw", "raw_huis_te_koop.csv")
-raw_apartement_te_koop_path = os.path.join(".", "plugins", "data", "raw", "raw_apartement_te_koop.csv")
-zipcodes_alpha_nl_new = os.path.join(".", "plugins", "data", "raw", "zipcodes_alpha_nl_new.csv")
-georef_belgium_postal_codes = os.path.join(".", "plugins", "data", "raw", "georef-belgium-postal-codes.csv")
-
-#open a the file from bpost and lowercase all location names
+# open a the file from bpost and lowercase all location names
 bpost_codes = pd.read_csv(zipcodes_alpha_nl_new, delimiter=";")
 bpost_codes[['Plaatsnaam', 'Hoofdgemeente', 'Provincie']] = bpost_codes[['Plaatsnaam', 'Hoofdgemeente', 'Provincie']].apply(lambda x: x.astype(str).str.lower())
 
-#open a the file from georef and lowercase all location names
+# open a the file from georef and lowercase all location names
 georef = pd.read_csv(georef_belgium_postal_codes, delimiter=";")
 georef[['Sub-municipality name (French)','Sub-municipality name (Dutch)', 'Sub-municipality name (German)']] = georef[['Sub-municipality name (French)','Sub-municipality name (Dutch)', 'Sub-municipality name (German)']].apply(lambda x: x.str.lower())
 georef_with_nl = georef[~georef['Sub-municipality name (Dutch)'].isna()] #drop NaN from the Dutch values
@@ -300,5 +304,15 @@ print("TOTAL HOUSE RECORDS:",len(house))
 print("TOTAL APP RECORDS:",len(app))
 print("-------------------------------")
 
-house.to_csv("./plugins/data/cleaned/clean_house.csv", sep=',', index=False, encoding='utf-8') 
-app.to_csv("./plugins/data/cleaned/clean_app.csv", sep=',', index=False, encoding='utf-8')   
+
+cleaned_data_folder = os.path.join(plugins_directory, 'data', 'cleaned')
+
+if not os.path.exists(cleaned_data_folder):
+    os.makedirs(cleaned_data_folder)
+    
+cleaned_house_csv_path = os.path.join(cleaned_data_folder, 'clean_house.csv')
+cleaned_app_csv_path = os.path.join(cleaned_data_folder, 'clean_app.csv')
+
+
+house.to_csv(cleaned_house_csv_path, sep=',', index=False, encoding='utf-8') 
+app.to_csv(cleaned_app_csv_path, sep=',', index=False, encoding='utf-8')   
