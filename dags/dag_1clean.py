@@ -29,6 +29,7 @@ with DAG(
     cleantask = BashOperator(
     task_id='cleaningtask',
     bash_command='python /opt/airflow/plugins/immo-eliza-2cleaning/clean.py',
+    schedule_interval=None,
     dag=dag,
     )
     
