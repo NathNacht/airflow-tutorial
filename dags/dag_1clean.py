@@ -1,6 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
+from airflow.sensors.filesystem import FileSensor
 from datetime import datetime, timedelta
 
 import os
@@ -18,10 +19,24 @@ with DAG(
     start_date=datetime(2024, 4, 30, 2),
     schedule_interval='@daily'
 ) as dag:
+    
+    # file_sensor_task = FileSensor(
+    # task_id='file_sensor_task',
+    # filepath='/opt/airflow/plugins/data/raw/raw_huis_te_koop.csv',
+    # dag=dag
+    # )
+
     cleantask = BashOperator(
     task_id='cleaningtask',
     bash_command='python /opt/airflow/plugins/immo-eliza-2cleaning/clean.py',
     dag=dag,
-)
+    )
     
-    cleantask
+    notify = BashOperator(
+    task_id="notify",
+    bash_command='echo "raw data cleaning done"',
+    dag=dag,
+    )
+
+    # file_sensor_task >> 
+    cleantask >> notify
