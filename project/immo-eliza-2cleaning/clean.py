@@ -1,14 +1,14 @@
 import pandas as pd
 import os
 
-AIRFLOW_HOME = os.getenv('AIRFLOW_HOME', '/home/miubuntu/home/BECODE_GUIDE/Airflow_tutorial/airflow-tutorial')
-plugins_directory = os.path.join(AIRFLOW_HOME, 'plugins')
+AIRFLOW_HOME = os.getenv('AIRFLOW_HOME', '/home/miubuntu/home/BECODE_PROJECTS/8_immo-eliza-airflow/immo-eliza-airflow')
+project_directory = os.path.join(AIRFLOW_HOME, 'project')
 
 # Define the file paths using os.path.join to ensure compatibility
-raw_huis_te_koop_path = os.path.join(plugins_directory, "data", "raw", "raw_huis_te_koop.csv")
-raw_apartement_te_koop_path = os.path.join(plugins_directory, "data", "raw", "raw_apartement_te_koop.csv")
-zipcodes_alpha_nl_new = os.path.join(plugins_directory, "data", "raw", "zipcodes_alpha_nl_new.csv")
-georef_belgium_postal_codes = os.path.join(plugins_directory, "data", "raw", "georef-belgium-postal-codes.csv")
+raw_huis_te_koop_path = os.path.join(project_directory, "data", "raw", "raw_huis_te_koop.csv")
+raw_apartement_te_koop_path = os.path.join(project_directory, "data", "raw", "raw_apartement_te_koop.csv")
+zipcodes_alpha_nl_new = os.path.join(project_directory, "data", "raw", "zipcodes_alpha_nl_new.csv")
+georef_belgium_postal_codes = os.path.join(project_directory, "data", "raw", "georef-belgium-postal-codes.csv")
 
 
 def strip_all_columns(df):
@@ -305,7 +305,7 @@ print("TOTAL APP RECORDS:",len(app))
 print("-------------------------------")
 
 
-cleaned_data_folder = os.path.join(plugins_directory, 'data', 'cleaned')
+cleaned_data_folder = os.path.join(project_directory, 'data', 'cleaned')
 
 if not os.path.exists(cleaned_data_folder):
     os.makedirs(cleaned_data_folder)
@@ -316,3 +316,5 @@ cleaned_app_csv_path = os.path.join(cleaned_data_folder, 'clean_app.csv')
 
 house.to_csv(cleaned_house_csv_path, sep=',', index=False, encoding='utf-8') 
 app.to_csv(cleaned_app_csv_path, sep=',', index=False, encoding='utf-8')   
+
+print(cleaned_house_csv_path)
