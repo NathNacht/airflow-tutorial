@@ -55,22 +55,23 @@ with DAG(
     )
 
     cleantask.doc_md = textwrap.dedent(
-        """\    
+    """
     #### Task Documentation
-    This task cleans the raw csv's of both house and apartment and stores a clean version in the data/cleaned folder.
-    Steps taken at cleaning:
-    - stripping blancs from all columns
-    - removing duplicates based on property_id
-    - removing records with empty price field
-    - removing records with empty area field
-    - removing records with empty living area
-    - removing streetnames and house numbers
-    - removing empty records that only have property_id
-    - removing house in apartments and apartments in houses
-    - lowercasing all locality names
-    - removing houses and apartments that are not in Belgium
-    - translate the locality names to Dutch
-    - add province names to the records
+    This task cleans the raw CSVs of both houses and apartments and stores a clean version in the `data/cleaned` folder.
+    
+    **Steps taken at cleaning:**
+    - Stripping blanks from all columns
+    - Removing duplicates based on `property_id`
+    - Removing records with empty `price` field
+    - Removing records with empty `area` field
+    - Removing records with empty `living area`
+    - Removing street names and house numbers
+    - Removing empty records that only have `property_id`
+    - Removing houses in apartments and apartments in houses
+    - Lowercasing all locality names
+    - Removing houses and apartments that are not in Belgium
+    - Translating the locality names to Dutch
+    - Adding province names to the records
     """
     )
     
@@ -84,6 +85,14 @@ with DAG(
     task_id='modeltrainingtask',
     bash_command='python /opt/airflow/project/immo-eliza-model/train_with_pipeline.py',
     dag=dag,
+    )
+
+    modeltraintask.doc_md = textwrap.dedent(
+    """
+    #### Task Documentation
+    This modeltraining uses randomforestregressor with cross validation.
+    Models are saved in the `data/models` folder.
+    """
     )
 
     notify_trained = BashOperator(
