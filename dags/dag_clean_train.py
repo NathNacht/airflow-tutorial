@@ -1,10 +1,22 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-from airflow.sensors.filesystem import FileSensor
+from airflow.sensors.base import BaseSensorOperator
 from datetime import datetime, timedelta
 
 import os
+
+class FileSensor(BaseSensorOperator):
+    def __init__(self, file_path, retries, retry_delay, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.file_path = file_path
+        self.retries = retries
+        self.retry_delay = retry_delay
+
+    def poke(self, context):
+        if os.path.exists(self.file_path):
+            return True
+        return False
 
 default_args = {
     'owner': 'airflow',
@@ -20,11 +32,13 @@ with DAG(
     schedule_interval='@daily'
 ) as dag:
     
-    # file_sensor_task = FileSensor(
-    # task_id='file_sensor_task',
-    # filepath='/opt/airflow/project/data/raw/raw_huis_te_koop.csv',
-    # dag=dag
-    # )
+    file_sensor_task = FileSensor(
+    task_id='file_sensor_task',
+    file_path='/opt/airflow/project/data/raw/raw_huis_te_koop.csv',
+    mode='poke',
+    retries=3,
+    dag=dag
+    )
 
     cleantask = BashOperator(
     task_id='cleaningtask',
@@ -50,5 +64,4 @@ with DAG(
     dag=dag,
     )
 
-    # file_sensor_task >> 
-    cleantask >> notify_cleaned >> modeltraintask >> notify_trained
+    file_sensor_task >> cleantask >> notify_cleaned >> modeltraintask >> notify_trained
