@@ -32,6 +32,8 @@ For this airflow DAG project we used Airflow version 2.9.0.
 
 The integrated steps of the previous projects are: Cleaning the data, creating and training the model.
 
+The predict_with_pipeline.py is also already available and could be implemented in a dag task as well.
+
 ## 🤖 File Structure 
 
 ```
@@ -65,6 +67,7 @@ The integrated steps of the previous projects are: Cleaning the data, creating a
 │   │   └── clean.py
 │   └── immo-eliza-model
 │       ├── __init__.py
+│       ├── predict_with_pipeline.py
 │       └── train_with_pipeline.py
 └── requirements.txt
 ```
