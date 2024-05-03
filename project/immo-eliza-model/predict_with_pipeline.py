@@ -2,6 +2,16 @@ import argparse
 import pandas as pd
 import pickle
 
+import os
+
+AIRFLOW_HOME = os.getenv('AIRFLOW_HOME', '/home/miubuntu/home/BECODE_PROJECTS/8_immo-eliza-airflow/immo-eliza-airflow')
+project_directory = os.path.join(AIRFLOW_HOME, 'project')
+
+# Define the file paths using os.path.join to ensure compatibility
+huis_pickle_file_path = os.path.join(project_directory, "data", "models", "rfr_house_model_with_pipeline.pkl")
+apartement_pickle_file_path = os.path.join(project_directory, "data", "models", "rfr_app_model_with_pipeline.pkl")
+
+
 if __name__ == "__main__":
     # Parse command-line arguments
     parser = argparse.ArgumentParser()
@@ -12,7 +22,7 @@ if __name__ == "__main__":
 
 
 if args.prop =='house':
-    with open('./data/models/rfr_house_model_with_pipeline.pkl', 'rb') as file:
+    with open(huis_pickle_file_path, 'rb') as file:
         model = pickle.load(file)
     X_test = pd.read_csv(args.input_file) 
 
@@ -25,7 +35,7 @@ if args.prop =='house':
     print("House Predictions saved to:", args.output_file)
 
 elif args.prop =='app':
-    with open('./data/models/rfr_app_model_with_pipeline.pkl', 'rb') as file:
+    with open(apartement_pickle_file_path, 'rb') as file:
         model = pickle.load(file)
     X_test = pd.read_csv(args.input_file) 
 
