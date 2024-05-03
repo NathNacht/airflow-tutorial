@@ -1,3 +1,4 @@
+import textwrap
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
@@ -40,10 +41,37 @@ with DAG(
     dag=dag
     )
 
+    file_sensor_task.doc_md = textwrap.dedent(
+        """\
+    #### Task Documentation
+    This task looks for the existence of the raw_huis_te_koop.csv file in the data/raw folder.    
+    """
+    )
+
     cleantask = BashOperator(
     task_id='cleaningtask',
     bash_command='python /opt/airflow/project/immo-eliza-2cleaning/clean.py',
     dag=dag,
+    )
+
+    cleantask.doc_md = textwrap.dedent(
+        """\    
+    #### Task Documentation
+    This task cleans the raw csv's of both house and apartment and stores a clean version in the data/cleaned folder.
+    Steps taken at cleaning:
+    - stripping blancs from all columns
+    - removing duplicates based on property_id
+    - removing records with empty price field
+    - removing records with empty area field
+    - removing records with empty living area
+    - removing streetnames and house numbers
+    - removing empty records that only have property_id
+    - removing house in apartments and apartments in houses
+    - lowercasing all locality names
+    - removing houses and apartments that are not in Belgium
+    - translate the locality names to Dutch
+    - add province names to the records
+    """
     )
     
     notify_cleaned = BashOperator(
