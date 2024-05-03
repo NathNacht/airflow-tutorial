@@ -8,12 +8,11 @@
 
 - [Info 📝](#📝-info)
 - [File Structure 🤖](#🤖-file-structure)
+- [The Docker file 🤖](#🤖-the-docker-file)
 - [Installation 🛠](#🛠-installation)
 - [DAG tasks 🚀](#🚀-dag-tasks)
 - [Airflow Information 🔍](#🔍-airflow-information)
 - [Timeline🕐 ](#🕐-timeline)
-
-
 
 
 ## 📝 Info
@@ -68,6 +67,19 @@ The integrated steps of the previous projects are: Cleaning the data, creating a
 │       ├── __init__.py
 │       └── train_with_pipeline.py
 └── requirements.txt
+```
+
+## 🤖 The Docker file
+
+A Dockerfile is needed to build the image.
+
+In order to add custom dependencies an extended image is used instead of the default one.
+The requirements.txt contains the additional dependencies that will be installed in the image.
+  
+```bash
+FROM apache/airflow:2.9.0
+ADD requirements.txt .
+RUN pip install apache-airflow==${AIRFLOW_VERSION} -r requirements.txt
 ```
 
 ## 🛠 Installation
