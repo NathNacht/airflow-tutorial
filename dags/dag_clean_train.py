@@ -22,7 +22,9 @@ class FileSensor(BaseSensorOperator):
 default_args = {
     'owner': 'airflow',
     'retries': 1,
-    'retry_delay': timedelta(minutes=5)
+    'retry_delay': timedelta(minutes=5),
+    'email' : ['datanerd07@gmail.com'],
+    'email_on_failure': True
 }
 
 with DAG(
